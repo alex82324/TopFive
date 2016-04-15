@@ -1,6 +1,4 @@
-//# TopFive
-//Computer Concepts
-
+package src;
 
 import java.io.BufferedWriter;
 import java.io.BufferedReader;
@@ -13,49 +11,49 @@ import java.util.ArrayList;
 
 public class TopFive {
 
-static String sCurrentLine;
-static ArrayList<String> fileArray = new ArrayList<String>();
-static ArrayList<String> rankArray = new ArrayList<String>();
-static ArrayList<String> commentArray = new ArrayList<String>();
-static String inputFile = "C:/Users/EJL114/Desktop/input.txt";
-static String outputFile= "C:/Users/EJL114/Desktop/output.txt";
-static String answer;
-static int rank;
-static boolean inputError = false;
-static Scanner myScanner = new Scanner(System.in);
+			static String sCurrentLine;
+			static ArrayList<String> fileArray = new ArrayList<String>();
+			static ArrayList<String> rankArray = new ArrayList<String>();
+			static ArrayList<String> commentArray = new ArrayList<String>();
+			static String inputFile = "C:/Users/EJL114/Desktop/input.txt";
+			static String outputFile= "C:/Users/EJL114/Desktop/output.txt";
+			static String answer;
+			static int rank;
+			static boolean inputError = false;
+			static Scanner myScanner = new Scanner(System.in);
 	
-public static void main(String[] args) {
-do{
-	promptUser();
-             readFile();
-        }            while (inputError == true);
-                      for (int i = 0; i < fileArray.size(); i++){
-                      System.out.println(fileArray.get(i));
-               }
-	                rank();
-       }
+	public static void main(String[] args) {
+		do{
+			promptUser();
+		    readFile();
+		 }while (inputError == true);
+		
+	              for (int i = 0; i < fileArray.size(); i++){
+	              System.out.println(fileArray.get(i));
+	              }
+	              
+	            rank();
+		       }
 
-public static void promptUser(){
-   System.out.println("Please enter file directory: ");
-	inputFile = myScanner.nextLine();
-	 }
-　
-public static void readFile(){
-
-try {
+	public static void promptUser(){
+		   System.out.println("Please enter file directory: ");
+			inputFile = myScanner.nextLine();
+			 }
 	
-        BufferedReader reader = new BufferedReader(new.             FileReader(inputFile));
-         while ((sCurrentLine = reader.readLine()) != null) {
-          fileArray.add(sCurrentLine);
-          inputError = false;
-          }
-} catch (IOException e) { //system reports if file isn't valid
-         System.out.println("File not found. Please enter.  new file name.");
-          inputError = true;
-          }
-}
-, but 
-
+	public static void readFile(){
+	
+		try {
+		        BufferedReader reader = new BufferedReader(new.FileReader(inputFile));
+		        while ((sCurrentLine = reader.readLine()) != null) {
+		        	fileArray.add(sCurrentLine);
+		        	inputError = false;
+		          }
+		} catch (IOException e) { //system reports if file isn't valid
+		         System.out.println("File not found. Please enter.  new file name.");
+		          inputError = true;
+		          }
+	}
+	
 	public static void rank(){
 		
 		for (int i = 0; i < fileArray.size(); i++){
@@ -80,8 +78,6 @@ try {
 		
 			}
 		}
-
-
 }
 
 
