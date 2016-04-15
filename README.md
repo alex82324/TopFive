@@ -65,14 +65,14 @@ public class TopFive {
 		                rank = Integer.parseInt(answer.trim()); //is the input an integer?
 		                
 		                if (rank < 0 || rank > fileArray.size()) { //make sure its a valid rank
-		                	System.out.println("I'm sorry -" + rank + " is not good");
+		                	System.out.println("I'm sorry " + answer + " is not good");
 		                	inputError = true;
 		                }
 		                else {
 		   					 inputError = false;
 		   				 }
 	           } catch (Exception e) { //inputs not an integer
-	        	   	System.out.println("I'm sorry -" + rank + " is not an integer!!");
+	        	   	System.out.println("I'm sorry " + answer + " is not an integer!!");
 	   				inputError = true;
 	           }
 		
