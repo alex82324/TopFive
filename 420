@@ -17,10 +17,14 @@ public class TopFive {
 			static ArrayList<String> commentArray = new ArrayList<String>();
 			static String inputFile = "/Users/Elsie/Desktop/input.txt";
 			static String outputFile= "C:/Users/EJL114/Desktop/output.txt";
-			static String answer;
+			static String answer = "";
 			static int rank;
 			static boolean inputError = false;
+			static boolean editing = false; 
+			static boolean notEditing = false;
 			static Scanner myScanner = new Scanner(System.in);
+			
+			public int rankObject = 0;
 	
 	public static void main(String[] args) {
 		
@@ -35,12 +39,24 @@ public class TopFive {
 	              }
 	              System.out.println();
 	              
-	              // ask user if they want to add or delete lines
+	//            addOrDeleteLines();
+
+	              
+	              
+	          System.out.println("Order these items into most favorite (1) to least favorite (" + fileArray.size() + "): ");
+	              for (int i = 0; i < fileArray.size(); i++){
+	              System.out.println(fileArray.get(i));
+	              }
+	              System.out.println();
 	              
 	            rank();
 	          
 	              for (int i = 0; i < rankArray.size(); i++){
 	              System.out.println((i+1) + " " + (rankArray.get(i)));
+	              }
+	              
+	              for (int i = 0; i < commentArray.size(); i++){
+	              System.out.println((i+1) + " " + (commentArray.get(i)));
 	              }
 	              
 	              System.out.println("Thanks for playing");
@@ -66,10 +82,10 @@ public class TopFive {
 		          }
 	}
 	
-	public static void integerCheck(){
-
+	public static void integerCheck(String prompt){
+		do{
 				try{
-		            System.out.println("Rank: ");
+					System.out.println(prompt);
 		            answer = myScanner.nextLine();
 		            rank = Integer.parseInt(answer.trim()); //is the input an integer?
 					inputError = false;
@@ -79,6 +95,8 @@ public class TopFive {
 				   	System.out.println("I'm sorry " + answer + " is not an integer!!");
 						inputError = true;
 			   }
+				
+		} while (inputError == true);
 
 	}
 	
@@ -91,9 +109,10 @@ public class TopFive {
 			    do{
 			         try{	
 //			        	 System.out.println("in the rank do while try catch loop");
-				         	integerCheck();
+				         	integerCheck("Rank");
 					         checkRank();
-		   					 storeRank();
+//		   					 storeRank();
+		   					 storeComment();
 		   					 inputError = false;
 					         
 		           } catch (Exception e) { //inputs could not be stored
@@ -126,9 +145,62 @@ public class TopFive {
 	
 	public static void storeRank(){
 		
-			rankArray.add(rank, sCurrentLine); //NOT WORKING
+			rankArray.add(sCurrentLine); //NOT WORKING
 	}
 	
+	public static void yesOrNo(String prompt){
+
+		do {
+		System.out.println(prompt); //prompts user
+		answer = myScanner.nextLine();
+		editing = answer.equalsIgnoreCase("yes");
+		notEditing = answer.equalsIgnoreCase("no");
+		
+			if (notEditing == false && editing == false){
+				System.out.print("Invalid entry. Please type \"Yes\" or \"No\". ");
+				}
+
+		} while (notEditing == false && editing == false);
+		
+	}
+	
+	public static void addOrDeleteLines(){
+	
+		do{
+			yesOrNo("Do you want to add a line? (Yes/No)");
+				if (editing == true){
+					System.out.println("Enter item to be added:  ");
+		            sCurrentLine = myScanner.nextLine();
+		            fileArray.add(sCurrentLine);
+				}
+		}while (editing == true);
+		
+		do{
+			try{
+				yesOrNo("Do you want to delete a line? (Yes/No)");
+					if (editing == true){
+					//	System.out.println("Enter line number to be deleted:  ");
+			            integerCheck("Enter line number to be deleted:  ");
+			            fileArray.remove((rank - 1));
+					}
+			} catch (Exception e){
+				System.out.println("Unable to delete line.");
+			}
+				
+		}while(editing == true);
+
+		
+	}
+	
+public static void storeComment(){
+		
+		System.out.print("Add comment: ");	
+		answer = myScanner.nextLine(); 
+		commentArray.add(answer);
+
+	}
+
+
 
 }
 
