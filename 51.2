@@ -1,0 +1,332 @@
+package src;
+
+import java.io.BufferedWriter;
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.FileReader;
+import java.io.IOException;
+import java.util.Scanner;
+import java.util.ArrayList;
+import java.util.Arrays; 
+
+public class TopFive {
+
+	static String sCurrentLine;
+	static ArrayList<String> fileArray = new ArrayList<String>();
+	static String inputFile = "/Users/alex82324/Downloads/mary.txt";
+	// static String outputFile= "C:/Users/EJL114/Desktop/output.txt";
+	static String answer = "";
+	static int rank;
+	static boolean inputError = false;
+	static boolean editing = false; 
+	static boolean notEditing = false;
+	static boolean spotFull = true;
+	static boolean playing = false;
+	static boolean stopping = false;
+	static Scanner myScanner = new Scanner(System.in);
+
+	public int rankObject = 0;
+	static int i = 0;
+	static int n = 0;
+
+
+	public static void main(String[] args) {
+
+		do{
+
+
+			do{
+				//			promptUser();
+				readFile();
+			}while (inputError == true);
+
+
+			for (int i = 0; i < fileArray.size(); i++){
+				System.out.println(fileArray.get(i));
+			}
+			System.out.println();
+
+			//           addOrDeleteLines();
+
+
+			System.out.println("Order these items into most favorite (1) to least favorite (" + fileArray.size() + "): ");
+			for (int i = 0; i < fileArray.size(); i++){
+				System.out.println(fileArray.get(i));
+			}
+			System.out.println();
+
+			String rankArray[] = new String[fileArray.size()];
+			String commentArray[] = new String[fileArray.size()];
+
+			rank(rankArray, commentArray);
+
+
+
+
+			for (int i = 0; i < rankArray.length; i++){
+				System.out.print(rankArray[i]);
+				System.out.print(" | ");
+				System.out.print(commentArray[i]);
+				System.out.println();
+			}
+
+			playAgain(rankArray, fileArray);
+		}while (playing == true);
+
+
+
+		System.out.println("Thanks for playing!");
+
+	}
+
+	public static void promptUser(){
+		System.out.println("Please enter file directory: ");
+		inputFile = myScanner.nextLine();
+	}
+
+	public static void readFile(){
+
+		try {
+			BufferedReader reader = new BufferedReader(new FileReader(inputFile));
+			while ((sCurrentLine = reader.readLine()) != null) {
+				fileArray.add(sCurrentLine);
+				inputError = false;
+			}
+		} catch (IOException e) { //system reports if file isn't valid
+			System.out.println("File not found. Please enter.  new file name.");
+			inputError = true;
+		}
+	}
+
+	public static void integerCheck(String prompt){
+		do{
+			try{
+				System.out.println(prompt);
+				answer = myScanner.nextLine();
+				rank = Integer.parseInt(answer.trim()); //is the input an integer?
+				inputError = false;
+				//				   	System.out.println("Rank is an integer");		
+
+			} catch (Exception e) { //inputs not an integer
+				System.out.println("I'm sorry " + answer + " is not an integer!!");
+				inputError = true;
+			}
+
+			checkRank();
+
+		} while (inputError == true);
+
+	}
+
+	public static void rank(String[] rankArray, String[] commentArray){
+
+		do{
+			for (int i = 0; i < fileArray.size(); i++){
+				System.out.println(fileArray.get(i)); //print out item
+				sCurrentLine = fileArray.get(i);
+
+				do{
+					try{	
+						integerCheck("Rank");
+						storeRank(rankArray, commentArray);
+						//						storeComment(commentArray);
+						inputError = false;
+
+					} catch (Exception e) { //inputs could not be stored
+						System.out.println("Could not store rank.");
+						inputError = true;
+					}
+
+				} while (inputError == true);
+			} while (inputError == true);
+		} while (inputError == true);
+
+
+	}
+
+	public static void checkRank(){
+
+		if (rank < 0 ) { //make sure its a valid rank
+			System.out.println("I'm sorry " + answer + " is out of range");
+			inputError = true;
+		}
+
+		else if (rank > fileArray.size()) { //make sure its a valid rank
+			System.out.println("I'm sorry " + answer + " is out of range");
+			inputError = true;
+		}
+
+
+	}
+
+	public static String[]  storeRank(String[] rankArray, String[] commentArray){
+
+		if (rankArray[rank-1] == null){ //First spot is empty. Yay.
+			rankArray[(rank-1)] = sCurrentLine;
+			System.out.println("Spot was empty.");
+		}
+
+		else {
+			System.out.println("Spot was full.");
+			identifyPushDown(rankArray, commentArray);
+
+		}
+
+		return rankArray;
+
+	}
+
+	public static int identifyPushDown(String[] rankArray, String[] commentArray){
+
+		n = (rank - 1);
+		i = (rank - 1);
+
+		try{
+			while (rankArray[i] != null){ // while the spot is full
+				i++;
+				n ++;
+			}
+			System.out.println(n);
+			pushDown(n, rankArray, commentArray);
+
+		} catch (Exception e){
+			System.out.println("Could not push down");
+			nextAvailableSpot(rankArray);
+		}
+
+		return n;
+
+	}
+
+	public static String[] pushDown(int n, String[] rankArray, String[] commentArray){
+
+
+		for (i = n; i >= rank; i--){
+			System.out.println(" n:" + n );
+			rankArray[i] = rankArray[i-1];
+
+		}
+		rankArray[(rank-1)] = sCurrentLine;
+
+		for (int i = 0; i < rankArray.length; i++){
+			System.out.println(rankArray[i]);
+		}
+
+		return rankArray;
+	}
+
+	public static void nextAvailableSpot(String[] rankArray){
+		while (rankArray[(rank - 1)] != null){ // spot is full
+			rank --;
+		}
+
+		rankArray[(rank-1)] = sCurrentLine;
+		System.out.print("Moved to next available spot");
+
+	}
+
+
+	public static void yesOrNo(String prompt){
+
+		do {
+			System.out.println(prompt); //prompts user
+			answer = myScanner.nextLine();
+			editing = answer.equalsIgnoreCase("yes");
+			notEditing = answer.equalsIgnoreCase("no");
+
+			if (notEditing == false && editing == false){
+				System.out.print("Invalid entry. Please type \"Yes\" or \"No\". ");
+			}
+
+		} while (notEditing == false && editing == false);
+
+	}
+
+	public static void addOrDeleteLines(){
+
+		do{
+			yesOrNo("Do you want to add a line? (Yes/No)");
+			if (editing == true){
+				System.out.println("Enter item to be added:  ");
+				sCurrentLine = myScanner.nextLine();
+				fileArray.add(sCurrentLine);
+			}
+		}while (editing == true);
+
+		do{
+			try{
+				yesOrNo("Do you want to delete a line? (Yes/No)");
+				if (editing == true){
+					//	System.out.println("Enter line number to be deleted:  ");
+					integerCheck("Enter line number to be deleted:  ");
+					fileArray.remove((rank - 1));
+				}
+			} catch (Exception e){
+				System.out.println("Unable to delete line.");
+			}
+
+		}while(editing == true);
+
+
+	}
+
+	public static String[]  storeComment(String[] commentArray){
+
+		System.out.print("Add comment: ");	
+		answer = myScanner.nextLine(); 
+		commentArray[(rank-1)] = answer;
+
+		return commentArray;
+
+	}
+
+
+	static void playAgain(String[] rankArray, ArrayList<String> fileArray) {
+
+		do {
+
+			System.out.println("\nDo you wish to play again? (Yes/No)");
+			String answer = myScanner.next();
+			playing = answer.equalsIgnoreCase("yes");
+			stopping = answer.equalsIgnoreCase("no");
+
+			if (stopping == false && playing == false){
+				System.out.print("Invalid entry. Please type \"Yes\" or \"No\". ");
+			}
+
+			if (playing == true){
+				rank = 0;
+				i = 0;
+				n = 0;
+				Arrays.fill(rankArray, null);
+				fileArray.clear();
+
+			}
+
+		} while (stopping == false && playing == false);
+	}
+
+	public static void WriteToFile(String[] commentArray, String[] rankArray) {
+		try{
+			
+			File file = new File("/Users/alex82324/Downloads/mary.txt");
+
+			if (!file.exists()){
+				file.createNewFile(); 
+			}
+			FileWriter fw = new FileWriter(file.getAbsolutePath());
+			BufferedWriter bw = new BufferedWriter(fw); 
+			for (int i = 0; i < rankArray.length; i++){
+				bw.newLine();
+				bw.write(rankArray[i]);
+			}
+			
+			bw.flush(); 
+			bw.close(); 
+
+		} catch (IOException e){
+			e.printStackTrace();
+		}
+	}
+}
